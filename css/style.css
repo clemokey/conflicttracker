@@ -1,0 +1,704 @@
+:root {
+    --primary-color: #287ee4;
+}
+
+/* Reset default margins */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+/* ===================== APP BAR (title left, filters right) ===================== */
+.appbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;              /* vertical-center everything */
+  gap: 12px;
+
+  padding: 6px 16px;                /* compact bar */
+  background: var(--primary-color, #287ee4);
+  color: #fff;
+}
+
+/* Title pushes filters to the right */
+.appbar .title {
+  margin-right: auto;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+/* Logo + title container */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;          /* pushes filters to the right */
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+/* Logo size — adjust to taste */
+.logo {
+  height: 50px;                /* keeps bar compact */
+  width: 50px;
+  object-fit: contain;
+  margin-right: 15px;
+  border-radius: 4px;          /* optional: soften corners */
+}
+.brand a {
+    color: #fff;
+    font-weight: 700; 
+}
+
+.brand a:hover {
+    color: yellow;
+    font-weight: 700; 
+}
+/* New subtitle */
+.appbar .subtitle {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* ===================== YEAR DROPDOWN (UL/LI) ===================== */
+/* Container + tiny label */
+.year-filter {
+  order: 1;                         /* sits to the left of pills */
+  position: relative;
+  padding-top: 15px;                /* room for tiny label */
+}
+.year-filter > label {
+  position: absolute; top: 0; left: 0;
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Trigger button (mimics your select look) */
+.year-filter .dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.2);
+  color: #fff;                      /* field text white */
+  font: inherit;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.year-filter .dropdown-btn:focus { outline: 2px solid rgba(255,255,255,0.6); }
+
+/* Menu panel */
+.year-filter .dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 95px; 
+  max-height: 320px; 
+  overflow: auto;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: #fff;
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 8px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+  display: none;
+  z-index: 2000;
+}
+
+/* Show when open (toggle a .open class on the wrapper) */
+.year-filter.open .dropdown-menu { display: block; }
+
+/* Items */
+.year-filter .dropdown-menu li {
+  padding: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.year-filter .dropdown-menu li:hover {
+  background: #454545;
+  color: #fff;
+}
+.year-filter .dropdown-menu li[aria-selected="true"] {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+/* Scrollbar styling for the in-panel list */
+.year-filter .dropdown-menu::-webkit-scrollbar { width: 10px; }
+.year-filter .dropdown-menu::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.06);
+  border-radius: 8px;
+}
+.year-filter .dropdown-menu::-webkit-scrollbar-thumb {
+  background: var(--primary-color, #287ee4);
+  border-radius: 8px;
+}
+.year-filter .dropdown-menu::-webkit-scrollbar-thumb:hover { filter: brightness(0.9); }
+.year-filter .dropdown-menu {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color, #287ee4) rgba(0,0,0,0.06);
+}
+
+/* ===================== DISORDER PILLS ===================== */
+.filter-pills {
+  order: 2;                          /* on the far right */
+  position: relative;
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-top: 15px;                 /* room for tiny label */
+  flex: 0 1 auto;                    /* don't stretch across the center */
+  min-width: 0;                      /* allow inner scroll */
+  scrollbar-width: none;             /* Firefox: hide bar */
+}
+.filter-pills::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+/* Tiny label above pills */
+.filter-pills > span {
+  position: absolute; top: 0; left: 0;
+  font-size: 10px;
+  line-height: 1;
+  color: #fff;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Pill chips */
+.filter-pill {
+  padding: 3px 10px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.9em;
+  transition: background 0.2s;
+}
+.filter-pill:hover { background: rgba(255,255,255,0.35); }
+.filter-pill.active {
+  background: #fff;
+  color: var(--primary-color, #287ee4);
+  border-color: #fff;
+  font-weight: 700;
+}
+/* For help button */
+
+/* Right-side actions */
+.appbar-actions {
+  order: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+/* Help button */
+.help-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+.help-btn i { font-size: 2.5rem;}
+.help-btn i:hover { color: #ededed;}
+
+/* Optional: tighten appbar spacing on short screens */
+@media (max-height: 700px) {
+  .logo { height: 44px; width: 44px; }
+  .brand .subtitle { display: none; }
+}
+
+/* Screen-reader-only utility */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,1px,1px); white-space: nowrap; border: 0;
+}
+
+/* ===================== SMALL SCREENS (optional wrap) ===================== */
+@media (max-width: 640px) {
+  .appbar { flex-wrap: wrap; align-items: flex-start; }
+  .year-filter, .filter-pills { padding-top: 8px; }
+}
+
+
+/* Map container takes full screen minus app bar */
+#mapContainer {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(174, 199, 247);
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/* Generic card style */
+.card {
+    z-index: 800;
+    position: absolute;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Indicator card */
+.indicator-card p {
+    margin: 10px 10px;
+    padding: 0;
+    font-size: 15px; /* also responsive title */
+}
+
+.indicator-value {
+    font-size: 3rem; /* min, preferred, max */
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    padding: 0;
+    line-height: 1.2;
+    word-break: break-word; /* ensures long text wraps if needed */
+}
+
+
+/* Chart card */
+.chart-card p {
+    font-size: 15px;
+}
+
+.chart-area {
+    border-radius: 6px;
+    text-align: center;
+}
+
+.chart-card span {
+    font-size: 10px;
+    color: gray;
+    margin: 10px;
+}
+
+/* List card */
+.list-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-card p {
+    margin: 10px;
+    font-size: 15px;
+    flex-shrink: 0; /* keep title height fixed */
+}
+
+.list-area {
+    flex: 1; /* take remaining height in card */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    overflow-y: auto; /* vertical scroll */
+    padding-right: 5px; /* space for scrollbar */
+    padding-left: 10px; /* space for scrollbar */
+}
+
+/* Thin blue scrollbar (Webkit browsers like Chrome, Edge, Safari) */
+.list-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.list-area::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+.list-area::-webkit-scrollbar-thumb {
+    background: var(--primary-color); /* blue thumb */
+    border-radius: 3px;
+}
+
+.list-area::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color); /* darker blue on hover */
+}
+
+/* Firefox scrollbar styling */
+.list-area {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+.list-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #f9f9f9;
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.list-item:hover {
+    background-color: #d0e7ff; /* Light blue on hover */
+    cursor: pointer;
+}
+
+.list-icon {
+    font-size: 1.2rem;
+}
+
+
+.event-date {
+    font-size: 0.75rem;
+    color: gray;
+}
+
+.event-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+/* Single-point dot */
+.dot-wrap { /* keep Leaflet from adding extra margins */ }
+.dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.08); /* subtle rim */
+}
+
+/* Cluster bubble */
+.cluster-bubble {
+  text-align: center;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 50%;
+  background: var(--primary-color);
+  outline: 8px solid #287de471;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  user-select: none;
+}
+
+
+.tabbed-chart-card {
+    display: flex;
+    flex-direction: column;
+}
+/* First tabhost */
+.tab-header {
+    display: flex;
+    gap: 5px;
+    padding: 4px 8px;
+}
+
+.tab-btn {
+    background: #ddd;
+    border: none;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+}
+
+.tab-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.tab-content {
+    flex: 1;
+    position: relative;
+}
+
+.tab-pane {
+    display: none;
+    height: 100%;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.chart-area {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-area > canvas {
+    max-width: 100%;
+    max-height: 100%;
+    padding: 5px;
+}
+
+
+/* Match Leaflet.draw toolbar sizing */
+.leaflet-draw-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: #e53935;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.leaflet-draw-clear:hover,
+.leaflet-draw-clear:focus {
+  background: #c62828;
+  outline: none;
+}
+
+.leaflet-draw-clear i {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* If you *must* keep leaflet-draw-toolbar somewhere, ensure no sprite interferes */
+.leaflet-draw-clear,
+.leaflet-draw-clear::before,
+.leaflet-draw-clear::after {
+  background-image: none !important;
+  content: none !important;
+}
+
+
+/* Small gap from the draw toolbar above (optional) */
+.leaflet-draw-toolbar + .leaflet-draw-toolbar {
+  margin-top: 4px;
+}
+
+
+.popup-card {
+  font-family: system-ui, sans-serif;
+  line-height: 1.4;
+  padding: 0;
+}
+
+.popup-title {
+  background-color: #287ee4;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 12px 12px 0 0;
+  padding-right: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-title h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.popup-body {
+    background: #f9f9f9;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+}
+
+.popup-body div {
+  margin-bottom: 2px;
+  font-size: 12px;
+}
+
+.popup-notes {
+  margin-top: 6px;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.leaflet-popup-content-wrapper {
+    padding: 0px;
+    text-align: left;
+    border-radius: 12px;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    line-height: 1.3;
+    font-size: 13px;
+    font-size: 1.08333em;
+    min-height: 1px;
+    border-radius: 12px;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    text-align: center;
+    width: 24px;
+    height: 24px;
+    font: 24px Tahoma, Verdana, sans-serif !important;
+    color: #fff !important;
+    text-decoration: none;
+    background: transparent;
+}
+
+
+
+  /* Overlay */
+  #splash-overlay {
+    position: fixed; inset: 0; display: none;
+    background: #287de43e;
+    z-index: 9999; /* above the map/UI */
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Dialog */
+  #splash-dialog {
+    width: min(700px, 70vw);
+    max-height: 86vh;
+    display: flex; flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  }
+
+  /* Header */
+  .splash-header {
+    background: var(--primary-color);
+    color: #fff;
+    padding: 1rem 1.25rem;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25); /* drop shadow at bottom */
+  }
+  .splash-header h1 {
+    margin: 0; font-size: 2rem; font-weight: 600;
+  }
+
+  /* Body */
+  .splash-body {
+    padding: 1.25rem;
+    background: #fff;
+    overflow: auto;
+    scrollbar-color: var(--primary-color, #287ee4) rgba(0,0,0,0.06);
+    scrollbar-width: thin;
+}
+  .splash-body h3 {
+    margin: 1rem 0 0.5rem; font-size: 1.05rem;
+  }
+  .splash-body p { margin: 0.5rem 0; line-height: 1.5; }
+
+  .help-image {
+    max-width: 100%; height: auto;
+  }
+
+  .credits {
+    margin: 0 0 0.25rem 1.1rem;
+  }
+
+  /* Numbered circles for .help-steps */
+.help-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+}
+
+.help-steps li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 34px 1fr;  /* circle + content */
+  gap: 10px;
+  line-height: 1.3;
+  align-items: start;
+  margin: 8px 0;
+  padding-bottom: 10px; /* space for circle */
+}
+
+.help-steps li::before {
+  content: counter(step);
+  display: inline-grid;
+  place-items: center;
+  width: 28px;                /* bump to 32–36px if you expect 2-digit steps */
+  height: 28px;
+  border-radius: 50%;
+  background: #000;           /* black circle */
+  color: #fff;                /* white number */
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+  /* Footer */
+  .splash-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; padding: 0.75rem 1rem;
+    background: var(--footer-bg);
+    border-top: 1px solid #e2e2e2; /* solid grey border top */
+  }
+  .remember {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.95rem; color: #0b1a2b;
+  }
+  .close-btn {
+    background: var(--primary-color); color: #fff;
+    border: none; border-radius: 5px;
+    padding: 0.55rem 1rem; font-weight: 600; cursor: pointer;
+  }
+  .close-btn:hover { opacity: 0.75; }
+
+  /* Responsive: stack tips on narrow screens */
+  @media (max-width: 700px) {
+    .tip { grid-template-columns: 1fr; }
+    .img-placeholder { height: 120px; }
+  }
+
+  /* Shake animation */
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  15%  { transform: translateX(-10px); }
+  30%  { transform: translateX(8px); }
+  45%  { transform: translateX(-6px); }
+  60%  { transform: translateX(4px); }
+  75%  { transform: translateX(-3px); }
+  90%  { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+#splash-dialog { will-change: transform; }
+.dialog-shake  { animation: shake 450ms ease; }
+
+/* Respect reduced motion users: use a soft pulse instead */
+@media (prefers-reduced-motion: reduce) {
+  .dialog-shake { animation: pulse-outline 300ms ease; }
+  @keyframes pulse-outline {
+    0%,100% { box-shadow: 0 0 0 0 rgba(40,126,228,0.0); }
+    50%     { box-shadow: 0 0 0 6px rgba(40,126,228,0.35); }
+  }
+}

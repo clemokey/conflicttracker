@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abuja Conflict Tracker - Bamidele Oke</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Esri Leaflet Plugin -->
+    <script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet.js"></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css">
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
+    <!-- Chart.js for charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey@0.12"></script>
+
+
+    <!-- Font Awesome for UI icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Favicon -->
+    <!-- <link rel="icon" href="images/favicon.ico" type="image/x-icon"> -->
+</head>
+<body>
+    
+        
+    <!-- Splashscreen -->
+    <div id="splash-overlay" aria-hidden="true">
+        <div id="splash-dialog" role="dialog" aria-modal="true" aria-labelledby="splash-title">
+            <!-- Header -->
+            <div class="splash-header">
+            <h1 id="splash-title">Welcome!</h1>
+            </div>
+
+            <!-- Body -->
+            <div class="splash-body">
+            <section>
+                <p>
+                This interactive web mapping application visualizes armed conflict and political violence incidents in the Federal Capital Territory (FCT) of Nigeria from 1997 to 2024. Data is sourced from the Armed Conflict Location & Event Data Project (ACLED) and includes event type, location, actors, fatalities, and detailed context. While the application is thoughtfully designed to be user friendly, the information below provides a brief overview of how to use the application effectively.
+                </p>
+            </section>
+
+            <section>
+                <h2>How to use</h2>
+                <img src="images/help.png" alt="how to use" class="help-image" />
+                <ol class="help-steps">
+                    <li>The chart shows the distribution of armed conflicts by event type. You can click the chart slices to filter the data. To clear the filter, click the chart again.</li>
+                    <li>Just below the zoom controls, there are three drawing tools, you can use them to draw a shape over the map and filter the data with the features within the shape.</li>
+                    <li>The year filter allows you to filter the data for a specific year. This can help you to understand how things played out in a specific year.</li>
+                    <li>ACLED have categorized the data based on the type of disorder. It is with great pleasure that I added a filter using the disorder type.</li>
+                    <li>While this welcome page is essential and nicely designed, I believe that is not the highlight so when you click "Don't show this again" below, the dialog will respect that choice. However, if you ever forget how things work, click this help button and it will display the help page again.</li>
+                    <li>This is my favorite button in this application. It clears every filter, drawn shape, and map navigation. It restores the application to the default view as if it was first loaded. If you think its no longer working, refresh the browser page, there is no reset better than that!</li>
+                    <li>This is the common layer list widget, I didn't want to make a big deal about it but it is essential because you may want to change the basemap or display the heatmap and turn off the events layer.</li>
+                    <li>On the right side of the map, you will find a list of recent events. You can click on any event to see its details.</li>
+                    <li>Finally (this one is not in the diagram so don't look up), the map is interactive. You can click on any point to see the details of the event. You can also zoom in and out using the zoom controls or your mouse wheel.</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>Credits</h2>
+                <ul class="credits">
+                    <li>Data © <a href="https://acleddata.com/" target="_blank" rel="noopener">ACLED</a></li>
+                    <li>Basemaps from Google, Esri, and OpenStreetMap</li>
+                    <li>Charts powered by <a href="https://www.chartjs.org/" target="_blank" rel="noopener">Chart.js</a>, plus plugins (Sankey and Radar)</li>
+                </ul>
+            </section>
+            </div>
+
+            <!-- Footer -->
+            <div class="splash-footer">
+                <label class="remember">
+                    <input type="checkbox" id="dontShowAgain" />
+                    <span>Don't show this again</span>
+                </label>
+                <button id="closeSplash" class="close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+    <!-- App Bar -->
+    <header class="appbar">
+    <div class="brand" href="#" aria-label="Home">
+        <img class="logo" src="https://bamideleoke.dev/assets/images/fafef8df75692fc90de19b43b2931e9512423d80992b32b7fbefaa8756b34410.png" alt="City Monitor logo">
+
+        <div class="brand-text">
+            <span class="title">Abuja Conflict Tracker</span>
+            <span class="subtitle">Armed Conflict Events in the FCT from 1997 to 2024 by
+                <a href="https://bamideleoke.dev" target="_blank" rel="noopener">BAMIDELE OKE</a>
+            </span>
+        </div>
+    </div>
+
+    <!-- Year dropdown -->
+    <div class="year-filter dropdown" id="yearFilterWrap">
+        <label>Filter by year</label>
+        <button id="yearBtn" class="dropdown-btn" aria-haspopup="listbox" aria-expanded="false">
+        <span id="yearBtnText">All years</span>
+        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+        </button>
+        <ul id="yearMenu" class="dropdown-menu" role="listbox" tabindex="-1"></ul>
+    </div>
+
+    <div class="filter-pills" id="disorderTypeFilters">
+        <span>Filter events by Disorder Type</span>
+        <!-- Pills injected via JS -->
+    </div>
+
+    <!-- Actions (right) -->
+    <div class="appbar-actions">
+        <button id="helpBtn" class="help-btn" aria-label="Help" title="Help">
+        <i class="fa fa-question-circle" aria-hidden="true"></i>
+        <span class="sr-only">Help</span>
+        </button>
+    </div>
+    </header>
+
+
+    <!-- Map Container -->
+    <div id="mapContainer">
+
+        <div id="map" class="card" style="top: 3%; left: 18%; width: 65%; height: 64%;"></div>
+        
+        <!-- Indicator Card -->
+        <div class="card indicator-card" style="top: 3%; left: 1%; width: 8.5%; height: 12%;">
+            <p>Events</p>
+            <div id="eventsIndicator" class="indicator-value"></div>
+        </div>
+        
+        <!-- Indicator Card -->
+        <div class="card indicator-card" style="top: 3%; left: 10%; width: 7%; height: 12%;">
+            <p>Fatalities</p>
+            <div id="fatalitiesIndicator" class="indicator-value"></div>
+        </div>
+
+        <!-- Chart Card -->
+        <div class="card chart-card" style="top: 17%; left: 1%; width: 16%; height: 24%; overflow: hidden;">
+            <p style="height: 10%; margin: 5% 0 0 0; padding-left: 10px;">Event Type</p>
+            <div class="chart-area" style="height: 70%; display: flex; align-items: center; justify-content: center;">
+                <canvas id="eventTypeChart" style="max-width: 100%; max-height: 100%;"></canvas>
+            </div>
+            <span style="height: 10%; display: block;">Distribution of armed conflicts per event type.</span>
+        </div>
+
+        <!-- Chart Card -->
+        <div class="card chart-card" style="bottom: 33%; left: 1%; width: 16%; height: 24%;">
+            <p style="height: 10%; margin: 5% 0 0 0; padding-left: 10px;">Events by LGA</p>
+            <div class="chart-area" style="height: 70%; display: flex; align-items: center; justify-content: center;">
+                <canvas id="eventsByAdmin2Chart" style="max-width: 100%; max-height: 100%;"></canvas>
+            </div>
+            <span style="height: 10%; display: block;">Distribution of armed conflicts per LGA.</span>
+        </div>
+
+        
+        <!-- Tabbed Chart Card -->
+        <div class="card chart-card tabbed-chart-card" style="bottom: 2%; left: 1%; width: 40%; height: 29%;">
+        
+            <!-- Tab buttons -->
+            <div class="tab-header">
+                <button class="tab-btn active" data-tab="heatmap">Monthly Heatmap</button>
+                <button class="tab-btn" data-tab="disorder">Disorder Type of Events</button>
+                <button class="tab-btn" data-tab="timeline">Timeline</button>
+                <button class="tab-btn" data-tab="subevent">Sub Event Distribution</button>
+            </div>
+            
+            <!-- Chart containers -->
+            <div class="tab-content">
+                <div id="heatmap-tab" class="tab-pane active">
+                    <div class="chart-area">
+                        <canvas id="yearMonthHeatmap"></canvas>
+                    </div>
+                </div>
+                <div id="disorder-tab" class="tab-pane">
+                    <div class="chart-area">
+                        <canvas id="sankeyDisorderType"></canvas>
+                    </div>
+                </div>
+                <div id="timeline-tab" class="tab-pane">
+                    <div class="chart-area">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+                <div id="subevent-tab" class="tab-pane">
+                    <div class="chart-area">
+                        <canvas id="subEventTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card chart-card" style="bottom: 2%; left: 42%; width: 15%; height: 29%;">
+            <p style="height: 10%; margin-top: 8px; padding-left: 10px;">Events by DoW</p>
+            <div class="chart-area" style="height: 70%; display: flex; align-items: center; justify-content: center;">
+                <canvas id="dowRadar" style="max-width: 100%; max-height: 100%;"></canvas>
+            </div>
+            <span style="height: 10%; display: block;">Distribution of armed conflicts per day of week.</span>
+        </div>
+
+        <div class="card chart-card" style="bottom: 2%; left: 58%; width: 25%; height: 29%;">
+            <p style="height: 10%; margin-top: 8px; padding-left: 10px;">Fatalities per Events Type</p>
+            <div class="chart-area" style="height: 80%; display: flex; align-items: center; justify-content: center;">
+                <canvas id="fatalitiesByTypeChart" style="max-width: 100%; max-height: 100%;"></canvas>
+            </div>
+        </div>
+
+        <!-- List Card -->
+        <div class="card list-card" style="top: 3%; right: 1%; width: 15%; bottom: 2%;">
+            <p>Recent Events</p>
+            <div class="list-area">
+                
+            </div>
+        </div>
+
+    </div>
+
+
+    <script src="js/functions.js"></script>
+    <script src="data/abuja.js"></script>
+    <script src="data/events.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
