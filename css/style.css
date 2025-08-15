@@ -702,3 +702,46 @@ body {
     50%     { box-shadow: 0 0 0 6px rgba(40,126,228,0.35); }
   }
 }
+
+/* Overlay hidden by default */
+#small-screen-overlay {
+  display: none; /* default for big screens */
+  position: fixed;
+  inset: 0;
+  background-color: #0000aa; /* Blue screen */
+  color: white;
+  z-index: 9999;
+  font-family: monospace;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Center the content vertically */
+#small-screen-overlay .overlay-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#small-screen-overlay h1 {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+#small-screen-overlay p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+/* Show overlay when screen < tablet size (example: 768px) */
+@media screen and (max-width: 768px) {
+  #small-screen-overlay {
+    display: block;
+  }
+  
+  /* Optionally hide the rest of the app */
+  body > *:not(#small-screen-overlay) {
+    display: none;
+  }
+}
