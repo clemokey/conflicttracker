@@ -710,7 +710,7 @@ body {
   inset: 0;
   background-color: #0000aa; /* Blue screen */
   color: white;
-  z-index: 9999;
+  z-index: 99999;
   font-family: monospace;
   text-align: center;
   padding: 2rem;
