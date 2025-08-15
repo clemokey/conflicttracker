@@ -4,38 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abuja Conflict Tracker - Bamidele Oke</title>
+
+    <!-- Basic Meta -->
+    <meta name="description" content="This interactive web mapping application visualizes armed conflict and political violence incidents in the Federal Capital Territory (FCT) of Nigeria from 1997 to 2024." />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:title" content="Abuja Conflict Tracker - Bamidele Oke" />
+    <meta property="og:description" content="This interactive web mapping application visualizes armed conflict and political violence incidents in the Federal Capital Territory (FCT) of Nigeria from 1997 to 2024." />
+    <meta property="og:image" content="https://bamideleoke.dev/demo/conflicttracker/images/thumbnail.png" />
+    <meta property="og:url" content="https://bamideleoke.dev" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Abuja Conflict Tracker - Bamidele Oke" />
+    <meta name="twitter:description" content="This interactive web mapping application visualizes armed conflict and political violence incidents in the Federal Capital Territory (FCT) of Nigeria from 1997 to 2024." />
+    <meta name="twitter:image" content="https://bamideleoke.dev/demo/conflicttracker/images/thumbnail.png" />
+ 
+
     <link rel="stylesheet" href="css/style.css">
 
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/leaflet.css" />
 
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="js/utils/leaflet.js"></script>
 
     <!-- Esri Leaflet Plugin -->
-    <script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet.js"></script>
+    <script src="js/utils/esri-leaflet.js"></script>
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <link rel="stylesheet" href="css/MarkerCluster.css" />
+    <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+    <script src="js/utils/leaflet.markercluster.js"></script>
+    <script src="js/utils/leaflet-heat.js"></script>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css">
-    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
-    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    <script src="js/utils/leaflet.draw.js"></script>
+    <script src="js/utils/turf.min.js"></script>
 
     <!-- Chart.js for charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-sankey@0.12"></script>
+    <script src="js/utils/chart.js"></script>
+    <script src="js/utils/chartjs-adapter-date-fns.js"></script>
+    <script src="js/utils/chartjs-chart-matrix3.js"></script>
+    <script src="js/utils/chartjs-chart-sankey.js"></script>
 
 
     <!-- Font Awesome for UI icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Favicon -->
-    <!-- <link rel="icon" href="images/favicon.ico" type="image/x-icon"> -->
+    <link rel="icon" href="https://bamideleoke.dev/assets/images/fafef8df75692fc90de19b43b2931e9512423d80992b32b7fbefaa8756b34410.png" type="image/x-icon">
 </head>
 <body>
     
