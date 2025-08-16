@@ -285,7 +285,7 @@ body {
     font-size: 3rem; /* min, preferred, max */
     font-weight: bold;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 0;
     padding: 0;
     line-height: 1.2;
     word-break: break-word; /* ensures long text wraps if needed */
